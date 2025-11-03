@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connecting People - Chatroom</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="chat-container">
+    <!-- Left Panel: Online Users -->
+    <aside class="users-panel">
+      <h2>🟢Online Users🟢</h2>
+      <ul id="onlineUsers"></ul>
+    </aside>
+
+    <!-- Chat Section -->
+    <main class="chat-section">
+      <div class="chat-header">
+        <h2 id="nicknameDisplay"></h2>
+        <div class="chat-header">
+            <h2 id="nicknameDisplay"></h2>
+            <div class="button-container">
+              <button id="shop">Shop🛒</button>
+              <button id="voiceChatBtn">Voie Chat🔊</button>
+              <button id="logoutBtn">Logout🚶‍♂️</button>
+            </div>
+            
+          </div>
+          
+        <div class="coins">
+          💰 <span id="coinCount">0</span>
+        </div>
+      </div>
+
+      <div id="chatMessages" class="chat-messages">
+      </div>
+      
+
+      <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Type your message..." />
+        <button id="sendBtn">Send</button>
+      </div>
+    </main>
+  </div>
+<!-- SHOP POPUP -->
+<div id="shopModal" class="modal">
+  <div class="modal-content">
+    <h2>🛍️ Badge Shop</h2>
+    <p class="note">Note: Buying a new badge replaces your previous one.</p>
+    <p class="note">Note: The more you chat, the more you earn!</p>
+
+    <div class="badge-grid" id="badgeGrid">
+      <!-- Badges dynamically added by JS -->
+    </div>
+
+    <button id="closeShop">Close</button>
+  </div>
+</div>
+<!-- ⚡ Branding Footer -->
+<div class="branding">
+  <img src="diamond.jpg" alt="Diamond Logo" class="branding-logo">
+  <span class="branding-text">Powered by <strong>Diamond Company</strong></span>
+</div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

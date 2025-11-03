@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Connecting People - Login</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: radial-gradient(circle at top left, #1e1e1e, #0f0f0f);
+      font-family: "Poppins", sans-serif;
+      overflow: hidden;
+    }
+
+    /* Animated background glow */
+    body::before {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.25), transparent 70%);
+      top: -50px;
+      left: -50px;
+      border-radius: 50%;
+      animation: glow 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { transform: scale(1); opacity: 0.6; }
+      to { transform: scale(1.2); opacity: 0.9; }
+    }
+
+    .login-box {
+      position: relative;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3rem 3.5rem;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .login-box:hover {
+      box-shadow: 0 0 50px rgba(255, 215, 0, 0.35);
+      transform: scale(1.02);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      background: linear-gradient(90deg, #ffcc33, #f5b700, #ffdf5a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    input {
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-align: center;
+      outline: none;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.05);
+    }
+
+    input:focus {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ffcc33, #ffb300, #ffdf5a);
+      color: #000;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: 0.3s;
+      width: 100%;
+      box-shadow: 0 0 15px rgba(255, 204, 51, 0.4);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 204, 51, 0.6);
+      filter: brightness(1.1);
+    }
+
+    /* Google-style but premium */
+    .google-btn {
+      margin-top: 15px;
+      background: linear-gradient(135deg, #34a853, #0f9d58);
+      color: white;
+      box-shadow: 0 0 10px rgba(50, 200, 120, 0.4);
+    }
+
+    .google-btn:hover {
+      background: linear-gradient(135deg, #0f9d58, #34a853);
+      box-shadow: 0 0 20px rgba(50, 200, 120, 0.6);
+    }
+
+    /* ✅ Popup styling */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #00c853;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 12px;
+      font-weight: bold;
+      text-align: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.3s ease;
+      box-shadow: 0 0 20px rgba(0, 255, 100, 0.4);
+    }
+
+    .popup.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    /* Footer Branding */
+    .branding {
+      position: absolute;
+      bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #bbb;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .branding img {
+      width: 35px;
+      height: 24px;
+      filter: drop-shadow(0 0 5px gold);
+    }
+
+
+  </style>
+</head>
+<body>
+  
+  <div class="login-box">
+    <h2>Connecting People 💬</h2>
+    <input type="text" id="nickname" placeholder="Choose a nickname" maxlength="15" />
+    <br>
+    <button id="joinBtn" class="google-btn">Sign in with Google</button>
+  </div>
+
+  <!-- ✅ Popup + Sound -->
+  <div id="popup" class="popup"></div>
+  <audio id="popupSound" src="coin.mp3" preload="auto"></audio>
+
+  <div class="branding">
+    <img src="diamond.jpg" alt="Diamond Logo">
+    <span>Powered by <strong>Diamond Company</strong></span>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import {
+      getAuth,
+      GoogleAuthProvider,
+      signInWithPopup,
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import {
+      getDatabase,
+      ref,
+      get,
+      set
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+  
+    const firebaseConfig = {
+      apiKey: "AIzaSyCJQSRiOKjAscoqEig57zqgMvrYvb_bO00",
+      authDomain: "connecting-people-25656.firebaseapp.com",
+      databaseURL: "https://connecting-people-25656-default-rtdb.firebaseio.com",
+      projectId: "connecting-people-25656",
+      storageBucket: "connecting-people-25656.firebasestorage.app",
+      messagingSenderId: "669225824395",
+      appId: "1:669225824395:web:aed6d9ec20708eb361a48e",
+    };
+  
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    const provider = new GoogleAuthProvider();
+
+    // ✅ Popup utility
+    function showPopup(message, color = "#00c853") {
+      const popup = document.getElementById("popup");
+      const sound = document.getElementById("popupSound");
+      popup.textContent = message;
+      popup.style.background = color;
+      popup.classList.add("show");
+      sound.currentTime = 0;
+      sound.play().catch(() => {});
+      setTimeout(() => popup.classList.remove("show"), 3000);
+    }
+  
+    const joinBtn = document.getElementById("joinBtn");
+  
+    joinBtn.addEventListener("click", async () => {
+      const nickname = document.getElementById("nickname").value.trim();
+      if (!nickname) return showPopup("⚠️ Please enter a nickname first!", "#ff5252");
+  
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const uid = user.uid;
+  
+        const uidRef = ref(db, "usersByUID/" + uid);
+        const uidSnap = await get(uidRef);
+  
+        if (uidSnap.exists()) {
+          const existingNick = uidSnap.val().nickname;
+          showPopup(`✅ Logged in as ${existingNick}`, "#00c853");
+          setTimeout(() => {
+            window.location.href = `chatroom.html?nick=${encodeURIComponent(existingNick)}`;
+          }, 1500);
+          return;
+        }
+  
+        const nickRef = ref(db, "users/" + nickname);
+        const nickSnap = await get(nickRef);
+        if (nickSnap.exists()) {
+          return showPopup("❌ Nickname already taken!", "#ff5252");
+        }
+  
+        await set(ref(db, "users/" + nickname), {
+          coins: 0,
+          badge: "",
+          online: true,
+          email: user.email,
+          joinedAt: Date.now(),
+        });
+  
+        await set(uidRef, {
+          nickname: nickname,
+          email: user.email,
+        });
+  
+        localStorage.setItem("nickname", nickname);
+        showPopup(`🎉 Welcome ${nickname}! Redirecting...`, "#00c853");
+        setTimeout(() => {
+          window.location.href = `chatroom.html?nick=${encodeURIComponent(nickname)}`;
+        }, 1500);
+  
+      } catch (err) {
+        console.error(err);
+        showPopup("⚠️ Login failed: " + err.message, "#ff5252");
+      }
+    });
+  </script>
+</body>
+</html>
