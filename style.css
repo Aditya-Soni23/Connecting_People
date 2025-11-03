@@ -351,24 +351,31 @@ body {
   margin-top: 4px;
   text-align: right;
 }
-
 /* ========================================================== */
-/* 📱 MOBILE RESPONSIVE DESIGN */
+/* 📱 MOBILE RESPONSIVE DESIGN — FIXED SCROLLING */
+/* Replace your existing @media (max-width: 768px) block with this */
 /* ========================================================== */
 @media (max-width: 768px) {
-  body {
-    height: auto;
-    align-items: flex-start;
+  /* ensure viewport fills and page doesn't scroll */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* prevent whole-page scroll */
   }
 
+  /* make the outer container fill the viewport and stack items */
   .chat-container {
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: column !important;
     width: 100%;
-    height: 100vh;
+    height: 100vh;         /* full viewport */
     border: none;
     border-radius: 0;
+    overflow: hidden;      /* hide extra overflow on container */
   }
 
+  /* keep users panel off-canvas and scrollable itself */
   .users-panel {
     position: fixed;
     top: 0;
@@ -380,32 +387,69 @@ body {
     transition: left 0.3s ease;
     border-right: 2px solid #333;
     box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
+  .users-panel.show-users { left: 0; }
 
-  .users-panel.show-users {
-    left: 0;
-  }
-
+  /* floating toggle button */
   #toggleUsersBtn {
     display: block;
     position: fixed;
-    top: 15px;
-    right: 10px;
+    top: 12px;
+    right: 12px;
     z-index: 1100;
     background: #ffcc00;
     border: none;
-    padding: 5px;
+    padding: 8px;
     border-radius: 50%;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
     box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
   }
 
+  /* chat-section should take full height inside chat-container */
+  .chat-section {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;       /* occupy viewport inside container */
+    overflow: hidden;    /* ensure scroll stays inside child */
+  }
+
+  /* header: small, non-scrolling */
   .chat-header {
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    gap: 4px;
+    text-align: center;
+    font-size: 14px;
+    background: #1e1e1e;
+  }
+
+  /* messages area: must be flexible and scrollable */
+  /* target both id and class to be safe */
+  #chatMessages, .chat-messages {
+    flex: 1 1 auto;            /* grow to fill remaining space */
+    min-height: 0;            /* CRITICAL for flex children to allow scrolling */
+    overflow-y: auto;         /* only this element scrolls */
+    -webkit-overflow-scrolling: touch; /* smooth momentum scrolling on iOS */
+    padding: 8px 10px;
+    box-sizing: border-box;
+  }
+
+  /* input area pinned to bottom (not sticky) */
+  .chat-input {
+    flex: 0 0 auto;
+    display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 12px;
-    text-align: center;
+    padding: 8px;
+    border-top: 1px solid #333;
+    background: #181818;
+  }
+
+  .chat-input input {
+    margin-right: 0;
   }
 
   .button-container {
@@ -416,28 +460,11 @@ body {
 
   .button-container button {
     flex: 1;
-    min-width: 90px;
+    min-width: 85px;
+    font-size: 13px;
+    padding: 6px 10px;
   }
 
-  .chat-input {
-    flex-direction: column;
-    gap: 8px;
-    padding: 8px;
-  }
-
-  .chat-input input {
-    margin-right: 0;
-  }
-
-  .branding {
-    position: static;
-    margin-top: 10px;
-    justify-content: center;
-  }
-}
-/* Hide branding on mobile */
-@media (max-width: 768px) {
-  .branding {
-    display: none !important;
-  }
+  /* hide branding on mobile */
+  .branding { display: none !important; }
 }
