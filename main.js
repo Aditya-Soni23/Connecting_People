@@ -30,12 +30,9 @@ const db = getDatabase(app);
 
 // --- NICKNAME HANDLING ---
 let nickname;
-
-// Try to get nickname from URL first
 const params = new URLSearchParams(window.location.search);
 const nickFromUrl = params.get("nick");
 
-// If not found, try localStorage
 if (nickFromUrl) {
   nickname = nickFromUrl;
   localStorage.setItem("nickname", nickname);
@@ -43,7 +40,6 @@ if (nickFromUrl) {
   nickname = localStorage.getItem("nickname");
 }
 
-// If still missing, redirect to login
 if (!nickname || nickname.trim() === "") {
   window.location.href = "index.html";
 }
@@ -121,11 +117,9 @@ onChildAdded(messagesRef, (snapshot) => {
 
   const badgeEmoji = msg.badge ? getBadgeEmoji(msg.badge) : "";
 
-  // Format date & time nicely
   const date = new Date(msg.timestamp);
   const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const dateString = date.toLocaleDateString([], { day: '2-digit', month: 'short', year: '2-digit' });
-
   const footer = `<div class="msg-time">${dateString} • ${timeString}</div>`;
 
   if (msg.sender === nickname) {
@@ -161,7 +155,6 @@ onChildAdded(messagesRef, (snapshot) => {
   chatMessages.appendChild(div);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
-
 
 // --- SEND MESSAGE ---
 sendBtn.addEventListener("click", sendMessage);
@@ -232,7 +225,6 @@ function showPopup(message, color = "#28a745") {
   popup.style.transition = "opacity 0.3s ease";
   document.body.appendChild(popup);
 
-  // Play coin sound
   const audio = new Audio("coin.mp3");
   audio.play();
 
@@ -285,11 +277,6 @@ function loadBadges() {
     div.addEventListener("click", () => purchaseBadge(b));
     badgeGrid.appendChild(div);
   });
-  const note = document.createElement("p");
-  note.style.textAlign = "center";
-  note.style.color = "#bbb";
-  note.style.fontSize = "0.9em";
-  badgeGrid.appendChild(note);
 }
 loadBadges();
 
@@ -314,11 +301,20 @@ async function purchaseBadge(badge) {
   coinCount.textContent = newCoins;
   showPopup(`✅ Purchased ${badge.name}! (Previous badge replaced)`);
 }
+
+// --- VOICE CHAT BUTTON ---
 const voiceChatBtn = document.getElementById("voiceChatBtn");
-
-// Replace this link with your actual Meet link
 const meetLink = "https://meet.google.com/vrs-agqm-wqn"; 
-
 voiceChatBtn.addEventListener("click", () => {
   window.open(meetLink, "_blank");
 });
+
+// --- MOBILE USERS PANEL TOGGLE ---
+const toggleUsersBtn = document.getElementById("toggleUsersBtn");
+const usersPanel = document.getElementById("usersPanel");
+
+if (toggleUsersBtn && usersPanel) {
+  toggleUsersBtn.addEventListener("click", () => {
+    usersPanel.classList.toggle("show-users");
+  });
+}
