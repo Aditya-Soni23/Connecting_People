@@ -5,52 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Connecting People - Login</title>
   <style>
-    /* === Global reset & sensible box-sizing === */
     *, *::before, *::after { box-sizing: border-box; }
-  
     html, body {
-      height: 100%;
-      margin: 0;
-    }
-  
-    body {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column; /* ensures vertical centering + branding positioning below */
-      min-height: 100vh;
-      background: radial-gradient(circle at top left, #1e1e1e, #0f0f0f);
+      height: 100%; margin: 0;
       font-family: "Poppins", sans-serif;
-      overflow-y: auto;
-      -webkit-font-smoothing: antialiased;
       color: white;
+      background: radial-gradient(circle at top left, #1e1e1e, #0f0f0f);
+      display: flex; justify-content: center; align-items: center;
+      flex-direction: column; text-align: center;
       padding: 24px;
-      text-align: center;
     }
-  
-    /* Animated background glow */
+
     body::before {
-      content: "";
-      position: absolute;
-      width: 420px;
-      height: 420px;
-      background: radial-gradient(circle, rgba(255, 215, 0, 0.22), transparent 70%);
-      top: -80px;
-      left: -80px;
-      border-radius: 50%;
-      pointer-events: none;
+      content: ""; position: absolute; width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(255,215,0,0.22), transparent 70%);
+      top: -80px; left: -80px; border-radius: 50%;
       filter: blur(6px);
       animation: glow 6s ease-in-out infinite alternate;
       z-index: 0;
     }
-  
+
     @keyframes glow {
       from { transform: scale(1); opacity: 0.6; }
-      to   { transform: scale(1.15); opacity: 0.95; }
+      to { transform: scale(1.15); opacity: 0.95; }
     }
-  
-    /* Login card */
+
     .login-box {
       position: relative;
       z-index: 1;
@@ -61,187 +40,86 @@
       box-shadow: 0 0 30px rgba(255, 215, 0, 0.18);
       backdrop-filter: blur(8px);
       transition: transform 0.25s ease, box-shadow 0.25s ease;
-      margin: auto; /* ensures it's centered vertically even if content expands */
     }
-  
-    .login-box:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 40px rgba(255, 215, 0, 0.28);
-    }
-  
+
+    .login-box:hover { transform: translateY(-3px); }
+
     h2 {
       font-size: clamp(1.25rem, 3.6vw, 1.9rem);
       background: linear-gradient(90deg, #ffcc33, #f5b700, #ffdf5a);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 0 0 18px;
-      letter-spacing: 0.6px;
       font-weight: 700;
+      margin-bottom: 18px;
     }
-  
-    form { display: grid; gap: 12px; align-items: center; }
-  
+
+    form { display: grid; gap: 12px; }
+
     input[type="text"] {
       padding: clamp(10px, 2.8vw, 14px);
-      width: 100%;
-      border: none;
-      border-radius: 10px;
+      width: 100%; border: none; border-radius: 10px;
       background: rgba(255,255,255,0.08);
-      color: #fff;
-      text-align: center;
-      outline: none;
-      font-size: clamp(0.95rem, 2.4vw, 1rem);
-      box-shadow: inset 0 0 6px rgba(255,255,255,0.03);
+      color: #fff; text-align: center;
+      outline: none; font-size: clamp(0.95rem, 2.4vw, 1rem);
     }
-  
-    input[type="text"]::placeholder { color: rgba(255,255,255,0.7); }
-  
     input[type="text"]:focus {
       background: rgba(255,255,255,0.125);
       box-shadow: 0 0 10px rgba(255,215,0,0.28);
     }
-  
+
     .btn {
       display: inline-block;
-      padding: clamp(10px, 2.6vw, 14px) clamp(14px, 4vw, 18px);
+      padding: clamp(10px, 2.6vw, 14px);
       border-radius: 10px;
       font-weight: 700;
       font-size: clamp(0.95rem, 2.4vw, 1rem);
-      width: 100%;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
-      box-shadow: 0 0 14px rgba(255,204,51,0.28);
+      width: 100%; border: none; cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-  
-    .btn:active { transform: translateY(1px); }
-  
+
     .google-btn {
       background: linear-gradient(135deg, #34a853, #0f9d58);
-      color: white;
-      box-shadow: 0 0 12px rgba(50,200,120,0.22);
+      color: white; box-shadow: 0 0 12px rgba(50,200,120,0.22);
     }
-  
-    .google-btn:hover {
-      filter: brightness(1.03);
-      box-shadow: 0 0 22px rgba(50,200,120,0.35);
-    }
-  
-    .primary {
-      background: linear-gradient(135deg, #ffcc33, #ffb300, #ffdf5a);
-      color: #000;
-    }
-  
+    .google-btn:hover { filter: brightness(1.03); }
+
     .popup {
       position: fixed;
-      left: 50%;
-      top: 14%;
-      transform: translateX(-50%) translateY(-10px) scale(0.98);
-      background: #00c853;
-      color: white;
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-weight: 700;
-      text-align: center;
-      z-index: 9999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.32s ease, transform 0.28s ease;
-      box-shadow: 0 0 20px rgba(0, 255, 100, 0.28);
-      max-width: min(92%, 420px);
-      width: auto;
+      left: 50%; top: 14%;
+      transform: translateX(-50%) scale(0.98);
+      background: #00c853; color: white;
+      padding: 12px 18px; border-radius: 12px;
+      font-weight: 700; text-align: center;
+      z-index: 9999; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 0 20px rgba(0,255,100,0.28);
     }
-  
-    .popup.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0) scale(1);
-      pointer-events: auto;
-    }
-  
+
+    .popup.show { opacity: 1; transform: translateX(-50%) scale(1); }
+
     .branding {
-      margin-top: 22px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #bbb;
-      font-size: 0.95rem;
-      opacity: 0.85;
-      z-index: 1;
+      margin-top: 22px; display: flex; align-items: center;
+      gap: 10px; color: #bbb; font-size: 0.95rem;
     }
-  
     .branding img {
-      width: 36px;
-      height: 24px;
-      object-fit: cover;
-      border-radius: 4px;
+      width: 36px; height: 24px; border-radius: 4px;
       filter: drop-shadow(0 0 6px gold);
     }
-  
-    @media (max-width: 540px) {
-      body { padding: 14px; }
-  
-      .branding {
-        position: fixed;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 12px;
-        background: rgba(0,0,0,0.25);
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: 0.86rem;
-        gap: 8px;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-        backdrop-filter: blur(6px);
-        margin: 0;
-      }
-  
-      .login-box {
-        padding: clamp(18px, 6vw, 34px);
-        width: 100%;
-        margin: auto;
-      }
-  
-      .popup {
-        top: 8%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-6px) scale(0.98);
-        padding: 10px 14px;
-      }
-    }
-  
-    @media (min-width: 1200px) {
-      body::before { width: 520px; height: 520px; top: -120px; left: -100px; }
-    }
-  
-    :focus { outline: 3px solid rgba(255,215,0,0.12); outline-offset: 2px; border-radius: 8px; }
   </style>
-  
 </head>
 <body>
-  <div class="login-box" role="region" aria-label="Login box">
+  <div class="login-box">
     <h2>Connecting People 💬</h2>
-
-    <!-- Using a simple form for semantics and better mobile keyboard behavior -->
     <form id="loginForm" onsubmit="return false;">
-      <label for="nickname" class="visually-hidden">Full Name</label>
-      <input
-        id="nickname"
-        name="nickname"
-        type="text"
-        placeholder="Enter your full name"
-        maxlength="15"
-        aria-label="Choose a nickname"
-        autocomplete="nickname"
-      />
+      <input id="nickname" type="text" placeholder="Enter your full name" maxlength="15" />
       <button id="joinBtn" class="btn google-btn" type="button">Sign in with Google</button>
     </form>
   </div>
 
-  <!-- Popup + Sound -->
-  <div id="popup" class="popup" role="status" aria-live="polite"></div>
-  <audio id="popupSound" src="coin.mp3" preload="auto"></audio>
+  <div id="popup" class="popup"></div>
+  <audio id="popupSound" src="audi.mp3" preload="auto"></audio>
 
-  <div class="branding" aria-hidden="true">
+  <div class="branding">
     <img src="diamond.jpg" alt="Diamond Logo">
     <span>Powered by <strong>Diamond Company</strong></span>
   </div>
@@ -252,6 +130,9 @@
       getAuth,
       GoogleAuthProvider,
       signInWithPopup,
+      onAuthStateChanged,
+      setPersistence,
+      browserLocalPersistence
     } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
     import {
       getDatabase,
@@ -275,6 +156,9 @@
     const db = getDatabase(app);
     const provider = new GoogleAuthProvider();
 
+    // Make sure Firebase remembers session across reloads
+    setPersistence(auth, browserLocalPersistence);
+
     function showPopup(message, color = "#00c853") {
       const popup = document.getElementById("popup");
       const sound = document.getElementById("popupSound");
@@ -282,18 +166,34 @@
       popup.style.background = color;
       popup.classList.add("show");
       sound.currentTime = 0;
-      sound.play().catch(() => {});
+      sound.play().catch(()=>{});
       setTimeout(() => popup.classList.remove("show"), 3000);
     }
 
-    const joinBtn = document.getElementById("joinBtn");
-    joinBtn.addEventListener("click", async () => {
+    // ✅ Auto-login if user is already signed in
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Already signed in
+        let nickname = localStorage.getItem("nickname");
+        if (!nickname) {
+          const uidRef = ref(db, "usersByUID/" + user.uid);
+          const uidSnap = await get(uidRef);
+          nickname = uidSnap.exists() ? uidSnap.val().nickname : null;
+        }
+        if (nickname) {
+          showPopup(`👋 Welcome back ${nickname}!`);
+          setTimeout(() => {
+            window.location.href = `chatroom.html?nick=${encodeURIComponent(nickname)}`;
+          }, 1200);
+        }
+      }
+    });
+
+    // Sign in button logic
+    document.getElementById("joinBtn").addEventListener("click", async () => {
       const nicknameInput = document.getElementById("nickname");
       const nickname = nicknameInput.value.trim();
-      if (!nickname) {
-        nicknameInput.focus();
-        return showPopup("⚠️ Please enter a nickname first!", "#ff5252");
-      }
+      if (!nickname) return showPopup("⚠️ Please enter a nickname first!", "#ff5252");
 
       try {
         const result = await signInWithPopup(auth, provider);
@@ -305,6 +205,7 @@
 
         if (uidSnap.exists()) {
           const existingNick = uidSnap.val().nickname;
+          localStorage.setItem("nickname", existingNick);
           showPopup(`✅ Logged in as ${existingNick}`, "#00c853");
           setTimeout(() => {
             window.location.href = `chatroom.html?nick=${encodeURIComponent(existingNick)}`;
@@ -314,10 +215,7 @@
 
         const nickRef = ref(db, "users/" + nickname);
         const nickSnap = await get(nickRef);
-        if (nickSnap.exists()) {
-          nicknameInput.focus();
-          return showPopup("❌ Nickname already taken!", "#ff5252");
-        }
+        if (nickSnap.exists()) return showPopup("❌ Nickname already taken!", "#ff5252");
 
         await set(ref(db, "users/" + nickname), {
           coins: 0,
@@ -326,13 +224,9 @@
           email: user.email,
           joinedAt: Date.now(),
         });
-
-        await set(uidRef, {
-          nickname: nickname,
-          email: user.email,
-        });
-
+        await set(uidRef, { nickname, email: user.email });
         localStorage.setItem("nickname", nickname);
+
         showPopup(`🎉 Welcome ${nickname}! Redirecting...`, "#00c853");
         setTimeout(() => {
           window.location.href = `chatroom.html?nick=${encodeURIComponent(nickname)}`;
@@ -343,11 +237,11 @@
       }
     });
 
-    // Optional: press Enter to trigger the button
+    // Press Enter to submit
     document.getElementById("nickname").addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        joinBtn.click();
+        document.getElementById("joinBtn").click();
       }
     });
   </script>
