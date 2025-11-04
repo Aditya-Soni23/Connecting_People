@@ -352,41 +352,25 @@ body {
   text-align: right;
 }
 /* ========================================================== */
-/* 📱 MOBILE RESPONSIVE DESIGN (Clean, Scrollable & Compact Header) */
+/* 📱 MOBILE RESPONSIVE DESIGN (Clean & Scrollable) */
 /* ========================================================== */
 @media (max-width: 768px) {
   html, body {
-    height: 100dvh; /* keeps visible viewport height */
+    height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* prevent body scroll */
-    display: flex;
-    flex-direction: column;
+    overflow: hidden; /* Prevent full page scroll */
   }
 
   .chat-container {
-    display: flex;
     flex-direction: column;
-    flex: 1;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     border: none;
     border-radius: 0;
     overflow: hidden;
   }
 
-  /* ✅ Chat area scroll fix */
-  #chatMessages {
-    flex: 1;
-    overflow-y: auto; /* enable scroll here */
-    -webkit-overflow-scrolling: touch; /* smooth mobile scroll */
-    height: auto;
-    padding: 10px 0 10px 0;
-  }
-
-  /* ======================== */
-  /* 👥 USERS PANEL SLIDE-IN  */
-  /* ======================== */
   .users-panel {
     position: fixed;
     top: 0;
@@ -405,76 +389,59 @@ body {
     left: 0;
   }
 
-  /* ======================== */
-  /* 🔝 HEADER COMPACT ROW     */
-  /* ======================== */
-  .chat-header {
-    display: flex;
-    flex-direction: row !important;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    padding: 6px 8px;
-    font-size: 13px;
-    background: #1e1e1e;
-    border-bottom: 1px solid #333;
-    height: auto;
-    overflow-x: auto;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .chat-header button,
-  .chat-header .money,
-  .chat-header .nickname {
-    flex-shrink: 0;
-  }
-
-  .chat-header button {
-    padding: 4px 6px;
-    font-size: 12px;
-    border-radius: 6px;
-    background: #292929;
-    color: white;
-    border: 1px solid #444;
-    cursor: pointer;
-    min-width: 50px;
-    height: 32px;
-  }
-
-  .chat-header button:active {
-    background: #333;
-  }
-
-  /* Order (Users → Nickname → Shop → Voice → Logout → Money) */
   #toggleUsersBtn {
-    order: 1;
-    position: static;
-    width: auto;
-    padding: 4px 6px;
-    font-size: 14px;
-    border-radius: 6px;
+    display: block;
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1100;
     background: #ffcc00;
-    color: #000;
-    box-shadow: 0 0 6px rgba(255, 255, 0, 0.4);
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
   }
 
-  .nickname { order: 2; color: #ffcc00; font-weight: 600; }
-  .shop-btn { order: 3; }
-  .voice-btn { order: 4; }
-  .logout-btn { order: 5; }
-  .money { order: 6; color: #00ff88; font-weight: bold; }
+  /* Shorter header */
+  .chat-header {
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 10px;
+    text-align: center;
+    font-size: 14px;
+    height: auto;
+    background: #1e1e1e;
+  }
 
-  /* ======================== */
-  /* ⌨️ CHAT INPUT AREA       */
-  /* ======================== */
+  .button-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .button-container button {
+    flex: 1;
+    min-width: 100px;
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  /* ✅ Scroll only chat area */
+  #chatMessages {
+    flex: 1;
+    overflow-y: auto;
+    height: calc(100vh - 130px); /* fits under header */
+    padding-bottom: 10px;
+  }
+
   .chat-input {
     flex-direction: column;
     gap: 8px;
     padding: 8px;
     border-top: 1px solid #333;
     background: #181818;
-    flex-shrink: 0; /* don't let it collapse */
   }
 
   .chat-input input {
