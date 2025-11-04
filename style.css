@@ -352,34 +352,48 @@ body {
   text-align: right;
 }
 /* ========================================================== */
-/* 📱 MOBILE RESPONSIVE DESIGN (Clean, Scrollable & Compact Header) */
+/* 📱 MOBILE RESPONSIVE DESIGN — FIXED SCROLLING ISSUE */
 /* ========================================================== */
 @media (max-width: 768px) {
   html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Prevent full page scroll */
+    overflow-x: hidden; /* keep horizontal scroll off */
+    overflow-y: auto;   /* allow vertical scroll */
+    -webkit-overflow-scrolling: touch; /* smooth iOS/Chrome scroll */
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh; /* dynamic viewport height */
   }
 
   .chat-container {
+    display: flex;
     flex-direction: column;
+    flex: 1;
     width: 100%;
-    height: 100vh;
+    min-height: 100dvh;
     border: none;
     border-radius: 0;
     overflow: hidden;
   }
 
-  /* ======================== */
-  /* 👥 USERS PANEL SLIDE-IN  */
-  /* ======================== */
+  /* ✅ Chat area scroll fix */
+  #chatMessages {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    height: auto;
+    padding: 10px 0;
+  }
+
+  /* 👥 USERS PANEL SLIDE-IN */
   .users-panel {
     position: fixed;
     top: 0;
     left: -100%;
     width: 75%;
-    height: 100%;
+    height: 100dvh;
     background: #111;
     z-index: 1000;
     transition: left 0.3s ease;
@@ -392,9 +406,7 @@ body {
     left: 0;
   }
 
-  /* ======================== */
-  /* 🔝 HEADER COMPACT ROW     */
-  /* ======================== */
+  /* 🔝 HEADER COMPACT ROW */
   .chat-header {
     display: flex;
     flex-direction: row !important;
@@ -408,6 +420,10 @@ body {
     height: auto;
     overflow-x: auto;
     white-space: nowrap;
+    flex-shrink: 0;
+    position: sticky; /* stays at top when scrolling */
+    top: 0;
+    z-index: 500;
   }
 
   .chat-header button,
@@ -432,7 +448,7 @@ body {
     background: #333;
   }
 
-  /* Element order (Users → Nickname → Shop → Voice → Logout → Money) */
+  /* ✅ Order (Users → Nickname → Shop → Voice → Logout → Money) */
   #toggleUsersBtn {
     order: 1;
     position: static;
@@ -451,25 +467,17 @@ body {
   .logout-btn { order: 5; }
   .money { order: 6; color: #00ff88; font-weight: bold; }
 
-  /* ======================== */
-  /* 💬 CHAT AREA             */
-  /* ======================== */
-  #chatMessages {
-    flex: 1;
-    overflow-y: auto;
-    height: calc(100vh - 120px);
-    padding-bottom: 10px;
-  }
-
-  /* ======================== */
-  /* ⌨️ CHAT INPUT AREA       */
-  /* ======================== */
+  /* ⌨️ CHAT INPUT AREA */
   .chat-input {
     flex-direction: column;
     gap: 8px;
     padding: 8px;
     border-top: 1px solid #333;
     background: #181818;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 500;
   }
 
   .chat-input input {
