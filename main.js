@@ -318,3 +318,8 @@ if (toggleUsersBtn && usersPanel) {
     usersPanel.classList.toggle("show-users");
   });
 }
+const closeUsersBtn = document.getElementById("closeUsersBtn");
+
+closeUsersBtn.addEventListener("click", () => {
+  usersPanel.classList.remove("show-users");
+});

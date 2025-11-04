@@ -440,6 +440,7 @@ body {
     background: #ffcc00;
     color: #000;
     box-shadow: 0 0 6px rgba(255, 255, 0, 0.4);
+    z-index: 1000;
   }
 
   /* ✅ INPUT STAYS AT BOTTOM */
@@ -458,4 +459,25 @@ body {
   .branding {
     display: none !important;
   }
+}
+/* 📱 Close button inside users panel */
+#closeUsersBtn {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 8px 0;
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+  transition: 0.3s ease;
+}
+
+#closeUsersBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
 }
